@@ -1,0 +1,24 @@
+Команды, которые использовала в Ubuntu.
+
+ 1  clear
+    2  echo -e "Собака\nКошка\nХомяк" > Домашние_животные.txt
+    3  echo -e "Лошадь\nВерблюд\nОсел" > Вьючные_животные.txt
+    4  cat Домашние_животные.txt Вьючные_животные.txt > Животные.txt
+    5  cat Животные.txt
+    6  mv Животные.txt Друзья_человека.txt
+    7  mkdir Мои_файлы
+    8  mv Друзья_человека.txt Мои_файлы/
+    9  sudo apt update
+   10  sudo apt install wget lsb-release gnupg
+   11  wget https://dev.mysql.com/get/mysql-apt-config_0.8.22-1_all.deb
+   12  sudo dpkg -i mysql-apt-config_0.8.22-1_all.deb
+   13  sudo apt update
+   14  sudo apt install mysql-server
+   15  sudo dpkg -i htop_*.deb
+   16  wget http://ftp.us.debian.org/debian/pool/main/h/htop/htop_3.0.5-7_amd64.deb
+   17  sudo dpkg -i htop_3.0.5-7_amd64.deb
+   18  sudo dpkg -r htop
+   19  dpkg -l | grep htop
+   20  sudo dpkg -r htop
+   21  history
+   22  history > history.txt

@@ -1,0 +1,140 @@
+Базу данных создала в Workbench через командную строку,
+затем наполнила таблицами и данными приведенными ниже.
+
+-- Таблица для домашних животных
+CREATE TABLE Domestic_Animals (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50),
+    species VARCHAR(50),
+    birth_date DATE,
+    commands TEXT
+);
+
+-- Таблица для вьючных животных
+CREATE TABLE Pack_Animals (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50),
+    species VARCHAR(50),
+    birth_date DATE,
+    commands TEXT
+);
+
+-- Подтаблицы для собак, кошек и хомяков
+CREATE TABLE Dogs (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50),
+    birth_date DATE,
+    commands TEXT
+);
+
+CREATE TABLE Cats (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50),
+    birth_date DATE,
+    commands TEXT
+);
+
+CREATE TABLE Hamsters (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50),
+    birth_date DATE,
+    commands TEXT
+);
+
+-- Подтаблицы для лошадей, верблюдов и ослов
+CREATE TABLE Horses (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50),
+    birth_date DATE,
+    commands TEXT
+);
+
+CREATE TABLE Camels (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50),
+    birth_date DATE,
+    commands TEXT
+);
+
+CREATE TABLE Donkeys (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50),
+    birth_date DATE,
+    commands TEXT
+);
+-- Пример данных для домашних животных
+INSERT INTO Dogs (name, birth_date, commands) VALUES 
+('Барон', '2020-03-15', 'сидеть, лежать, голос'),
+('Рекс', '2019-07-10', 'фас, ко мне');
+
+INSERT INTO Cats (name, birth_date, commands) VALUES 
+('Мурка', '2021-05-20', 'мяу, прыгнуть'),
+('Барсик', '2020-12-30', 'мяукать, точить когти');
+
+INSERT INTO Hamsters (name, birth_date, commands) VALUES 
+('Шустрик', '2022-02-15', 'грызть, бегать');
+
+-- Пример данных для вьючных животных
+INSERT INTO Horses (name, birth_date, commands) VALUES 
+('Гром', '2018-04-25', 'бежать, стой'),
+('Зевс', '2019-09-10', 'скакать, поворот');
+
+INSERT INTO Camels (name, birth_date, commands) VALUES 
+('Сахара', '2017-06-05', 'идти, лежать'),
+('Песок', '2018-10-15', 'влево, вправо');
+
+INSERT INTO Donkeys (name, birth_date, commands) VALUES 
+('Ушастик', '2021-01-15', 'нести груз, стоять'),
+('Троттер', '2020-11-11', 'повернуть, стоять');
+
+Удаляем всех верблюдов:
+DELETE FROM Camels;
+
+Теперь создадим объединённую таблицу для лошадей и ослов:
+CREATE TABLE Horses_And_Donkeys AS
+SELECT * FROM Horses
+UNION ALL
+SELECT * FROM Donkeys;
+
+Создадим таблицу, в которую попадут животные старше 1 года, но младше 3 лет. Также добавим вычисление их возраста с точностью до месяца:
+
+CREATE TABLE Young_Animals AS
+SELECT 
+    id, 
+    name, 
+    species, 
+    birth_date, 
+    commands,
+    TIMESTAMPDIFF(MONTH, birth_date, CURDATE()) AS age_in_months
+FROM (
+    SELECT id, name, 'Dog' AS species, birth_date, commands FROM Dogs
+    UNION ALL
+    SELECT id, name, 'Cat' AS species, birth_date, commands FROM Cats
+    UNION ALL
+    SELECT id, name, 'Hamster' AS species, birth_date, commands FROM Hamsters
+    UNION ALL
+    SELECT id, name, 'Horse' AS species, birth_date, commands FROM Horses
+    UNION ALL
+    SELECT id, name, 'Donkey' AS species, birth_date, commands FROM Donkeys
+) AS Animals
+WHERE TIMESTAMPDIFF(YEAR, birth_date, CURDATE()) > 1
+AND TIMESTAMPDIFF(YEAR, birth_date, CURDATE()) < 3;
+
+Теперь объединим все таблицы в одну общую, при этом сохраним информацию о принадлежности животных к исходным таблицам:
+
+CREATE TABLE All_Animals AS
+SELECT id, name, 'Dog' AS original_table, birth_date, commands FROM Dogs
+UNION ALL
+SELECT id, name, 'Cat' AS original_table, birth_date, commands FROM Cats
+UNION ALL
+SELECT id, name, 'Hamster' AS original_table, birth_date, commands FROM Hamsters
+UNION ALL
+SELECT id, name, 'Horse' AS original_table, birth_date, commands FROM Horses
+UNION ALL
+SELECT id, name, 'Donkey' AS original_table, birth_date, commands FROM Donkeys;
+
+Чтобы просмотреть данные в таблицах, можно использовать команды:
+
+SELECT * FROM All_Animals;
+SELECT * FROM Young_Animals;
+
